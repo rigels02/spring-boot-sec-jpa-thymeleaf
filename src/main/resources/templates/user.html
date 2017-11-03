@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1>User page (Spring Security protected)</h1>
+
+        <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+
+    </div>
+    <h1>ToDos list</h1>
+    <div th:if="${textMsg!=null}">  
+    <div class="alert alert-success">
+        <strong>Success!</strong> <span th:text="${textMsg}"></span>
+</div>
+    </div>       
+    <div th:if="${todos !=null}">
+    <table class="table table-striped">
+            <thead>
+            <th>Id</th>  
+            <th>Title</th>
+            <th>Create Time</th>
+            <th>Text</th>
+            <th>Completed</th>
+            </thead>
+
+            <tbody>
+                <tr th:each="todo : ${todos}">
+                    <td th:text="${todo.id}"></td>
+                    <td th:text="${todo.title}"></td>
+                    <td th:text="${todo.createDate}"></td>
+                    <td th:text="${todo.text}"></td>
+                    <td th:text="${todo.completed}"></td>
+                    
+                    <td><a th:href="@{/todo-delete(id=${todo.id})}"><span
+								class="glyphicon glyphicon-trash"></span>Delete</a></td>
+		   <td><a th:href="@{/todo-update(id=${todo.id})}"><span
+								class="glyphicon glyphicon-edit"></span>Update</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:unless="${todos !=null}">
+        No TODOs yet created
+    </div>
+    
+    <a href="/new-todo" class="btn btn-lg btn-success btn-block">Create ToDo</a>
+</div>
+<!-- /.container -->
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>

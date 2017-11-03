@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header :: header-css"/>
+    <style> 
+  .boxr{
+        border-radius: 10%;
+        border-style: double;
+        border-color: blue;
+        width: 140px;
+        height: 20px;
+        margin: 10px
+    }
+  
+  </style>  
+    
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1>Admin page (Spring Security protected)</h1>
+
+        <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+       
+        
+        <h2><a class="boxr" href="/h2-console">H2 Console</a></h2>
+        
+        <h1>Users list</h1>
+        <table class="table table-striped">
+            <thead>
+            <th>Id</th>  
+            <th>User Name</th>
+            <th>Roles</th>
+            </thead>
+
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:each="role: ${user.roles}"><span th:text="${role.name} "></span></td>			
+                </tr>
+            </tbody>
+        </table>
+        <h1>Delete User !</h1>
+
+        <div th:if="${infoTxt!=null}">       
+            <div class="alert alert-success">
+                <strong>Success!</strong> <span th:text="${infoTxt}"></span>
+            </div>     
+        </div>   
+        
+         <form th:action="@{/deleteUser}" method="post">
+            <div class="form-group">
+                        <input type="text"  class="form-control input-lg"
+                           name="userName"    placeholder="User Name" required="true" autofocus="true"/>
+                         <div class="alert alert-danger" th:if="${errText!=null}" th:text="${errText}">Name Error</div>
+                
+            </div> 
+            <input type="submit" value="Submit!"/>
+        </form>
+    </div>
+
+</div>
+<!-- /.container -->
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>
